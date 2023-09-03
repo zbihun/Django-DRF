@@ -48,7 +48,9 @@ class ProductViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, slug=None):
         serializer = ProductSerializer(
-            self.queryset.filter(slug=slug).select_related("category", "brand"),
+            self.queryset.filter(slug=slug)
+            .select_related("category", "brand")
+            .prefetch_related("product_line__product_image"),
             many=True,
         )
         data = Response(serializer.data)
